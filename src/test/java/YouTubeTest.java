@@ -1,7 +1,8 @@
-import io.qameta.allure.Step;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -45,7 +46,7 @@ public class YouTubeTest {
         actions = new Actions(driver);
     }
 
-
+    @Test
     public void test() throws InterruptedException {
         System.out.println("1. Перейдите на сайт https://www.youtube.com/");
         driver.get("https://www.youtube.com/");
@@ -125,7 +126,7 @@ public class YouTubeTest {
 
         System.out.println("8.  Перейдите на главную страницу сервиса");
         // Надо пододждать чтобы изменения применились
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         driver.findElementByXPath("//*[@id=\"logo-container\"]").click();
 
 
@@ -134,26 +135,21 @@ public class YouTubeTest {
         Thread.sleep(20000);
         WebElement searchInputWebElement = driver.findElementByXPath("//*[@id=\"search\"]");
         searchInputWebElement.sendKeys(String.valueOf(s.hashCode()));
-        try {
-            Robot robot = new Robot();
-            robot.keyPress(java.awt.event.KeyEvent.VK_ENTER);
-            robot.keyRelease(java.awt.event.KeyEvent.VK_ENTER);
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
+        driver.findElementByXPath("//*[@id=\"search-icon-legacy\"]").click();
 
         System.out.println("10. Проверьте, что в результатах поиска есть видео, загруженное вами.");
         // получаем список, содержащий контейнеры с thumbnails, заголовками, именем загрузившего
+        Thread.sleep(1000);
         List<WebElement> videoItemsList = driver.findElementsByXPath("//*[@id=\"contents\"]/ytd-video-renderer");
-
+        for (WebElement element : videoItemsList){
+            WebElement webElement = element.findElement(By.xpath("//*[@id=\"video-title\"]"));
+            webElement.getText();
+        }
     }
 
-    @Test
-    public void dummyTest(){
 
-    }
     @AfterClass
     public static void afterClass() {
-        driver.close();
+//        driver.close();
     }
 }
